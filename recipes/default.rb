@@ -10,7 +10,7 @@ include_recipe "yum::epel"
 include_recipe "php-fpm::yum-remi"
 include_recipe "php"
 
-packages = %w{php-fpm php-common php-gd php-mysql php-mbstring php-xml php-mcrypt}
+packages = %w{php-fpm} | node["php-fpm"]["additional_packages"]
 
 node.default["php-fpm"]["conf_dir"] = node["php"]["conf_dir"]
 
