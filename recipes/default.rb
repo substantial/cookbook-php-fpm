@@ -21,6 +21,7 @@ packages.each do |package|
   end
 end
 
+# Create php-fpm configuration
 template "#{node['php-fpm']['conf_dir']}/php-fpm.conf" do
   source "php-fpm.conf.erb"
   owner "root"
@@ -29,8 +30,16 @@ template "#{node['php-fpm']['conf_dir']}/php-fpm.conf" do
   notifies :restart, "service[php-fpm]"
 end
 
+# Create default www pool
+www_enabled = [true, "true"].include?(node["php-fpm"]["default_pool_enabled"])
+php_fpm_pool "www" do
+  enabled www_enabled
+end
+
+# Create php-fpm service
 service "php-fpm" do
   supports :start => true, :stop => true, :status => true, :restart => true, :reload => true
   action [:start, :enable]
   subscribes :restart, "template[#{node['php']['conf_dir']}/php.ini]"
 end
+
