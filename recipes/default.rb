@@ -39,7 +39,7 @@ end
 # Create php-fpm service
 service "php-fpm" do
   supports :start => true, :stop => true, :status => true, :restart => true, :reload => true
-  action [:start, :enable]
+  action [:enable]
   subscribes :restart, "template[#{node['php']['conf_dir']}/php.ini]"
 end
 
